@@ -4,11 +4,13 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.utils.http import urlencode
 
+admin.site.site_header = 'Driver On Hire'
+
 
 @admin.register(UserMaster)
 class UserMaster(admin.ModelAdmin):
     list_display = ("user_name", "mobile", "email_id", "branch", "role", "status", "edit_option", "delete_option")
-    search_fields = ("user_name__startswith", "mobile", "branch", "role", "status")
+    search_fields = ("user_name__startswith", "mobile", "status")
     fields = ("user_name", "mobile", "email_id", ("branch", "role", "status"))
     # list_editable = ['email_id']
 
@@ -49,7 +51,7 @@ class Country(admin.ModelAdmin):
 @admin.register(State)
 class State(admin.ModelAdmin):
     list_display = ("state", "state_code", "country", "status")
-    search_fields = ("state", "country")
+    search_fields = ("state",)
     fields = (("country", "state", "state_code", "status"),)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -70,7 +72,7 @@ class State(admin.ModelAdmin):
 @admin.register(City)
 class City(admin.ModelAdmin):
     list_display = ("city", "city_code", "state", "country", "status")
-    search_fields = ("city", "state", "country")
+    search_fields = ("city",)
     fields = (("country", "state"), ("city", "city_code", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -91,7 +93,7 @@ class City(admin.ModelAdmin):
 @admin.register(Location)
 class Location(admin.ModelAdmin):
     list_display = ("location", "city", "state", "country", "status")
-    search_fields = ("city", "state", "country", "location")
+    search_fields = ("location",)
     fields = (("country", "state"), ("city", "location", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -112,7 +114,7 @@ class Location(admin.ModelAdmin):
 @admin.register(Branch)
 class Branch(admin.ModelAdmin):
     list_display = ("branch_name", "branch_address", "branch_pin", "branch_contact", "city", "state", "country", "zone", "status")
-    search_fields = ("branch_name", "branch_address", "branch_pin", "branch_contact", "city", "state", "country")
+    search_fields = ["branch_name", "branch_address", "branch_pin", "branch_contact"]
     fields = (("branch_name", "branch_address"), ("branch_pin", "branch_contact"), ("country", "state"), ("zone", "city", "status"))
 
     def formfield_for_dbfield(self, *args, **kwargs):
@@ -133,7 +135,7 @@ class Branch(admin.ModelAdmin):
 @admin.register(Zone)
 class Zone(admin.ModelAdmin):
     list_display = ("zone_name", "city", "state", "country", "status")
-    search_fields = ("zone_name", "city", "state", "country")
+    search_fields = ("zone_name",)
     fields = ("zone_name", ("country", "state"), ("city", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -167,7 +169,7 @@ class Reference(admin.ModelAdmin):
 @admin.register(Tax)
 class Tax(admin.ModelAdmin):
     list_display = ("tax_name", "gst_rate", "cgst", "sgst", "igst", "cess", "status")
-    search_fields = ("tax_name",)
+    search_fields = ("tax_name", "gst_rate", "cgst", "sgst", "igst", "cess")
     fields = (("tax_name", "gst_rate", "cgst"), ("sgst", "igst", "cess", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -193,7 +195,7 @@ class Car(admin.ModelAdmin):
 @admin.register(CouponList)
 class CouponList(admin.ModelAdmin):
     list_display = ("booking_list", "coupon_name", "coupon_code", "discount_amount", "use_count", "valid_from", "valid_till", "status")
-    search_fields = ("booking_list", "coupon_name", "coupon_code")
+    search_fields = ("booking_list", "coupon_name", "coupon_code", "valid_from", "valid_till", "use_count")
     fields = (("booking_list", "coupon_name", "coupon_code"), ("discount_amount", "use_count"), ("valid_from", "valid_till", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -206,7 +208,7 @@ class CouponList(admin.ModelAdmin):
 @admin.register(Subscription)
 class Subscription(admin.ModelAdmin):
     list_display = ("scheme_type", "duty_type", "car_transmission", "amount", "validity_in_days", "no_of_duties", "tax", "status")
-    search_fields = ("scheme_type", "duty_type")
+    search_fields = ("scheme_type", "duty_type", "car_transmission", "amount", "validity_in_days", "no_of_duties")
     fields = (("scheme_type", "duty_type", "car_transmission"), ("amount", "validity_in_days", "no_of_duties", "tax", "status"))
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
